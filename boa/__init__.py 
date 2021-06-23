@@ -1,0 +1,3 @@
+from ._regression import RegHunter
+
+__all__ = ['RegBoa']
