@@ -1,3 +1,3 @@
 # Emerald
-![Emerald](emerald.jpg)
+![Emerald](emerald.html)
 Machine learning model choice and optimization library.
