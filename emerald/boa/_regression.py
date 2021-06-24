@@ -14,8 +14,8 @@ from ..gems import train_test_sets
 class _BaseBoa:
     def digest(self, data, impute='median'):
         data = data
-        nums = [col for col in data.columns if data.dtypes[col] == 'int']
-        cats = [col for col in data.columns if data.dtypes[col] != 'int']
+        nums = [col for col in data.columns if data.dtypes[col] == 'int' and set(data[col].unique()) != {0, 1}]
+        cats = [col for col in data.columns if data.dtypes[col] != 'int' or set(data[col].unique()) == {0, 1}]
 
 
 class RegBoa(_BaseBoa):

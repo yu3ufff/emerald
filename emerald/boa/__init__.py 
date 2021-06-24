@@ -1,3 +1,7 @@
-from ._regression import RegHunter
+from ._regression import RegHunter, ClassBoa, TreeBoa
 
-__all__ = ['RegBoa']
+__all__ = [
+    'RegBoa',
+    'ClassBoa',
+    'TreeBoa',
+]
