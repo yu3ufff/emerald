@@ -1,6 +1,6 @@
 ![Emerald](emerald.jpg)
 # Emerald
-A machine learning library for streamlining the process of cleaning and splitting data, training, optimizing, and testing various models based on the task, and scoring and ranking them during the exploratory phase for an elementary analysis of which models perform better for a specific dataset.
+A machine learning library for streamlining the process of (1) cleaning and splitting data, (2) training, optimizing, and testing various models based on the task, and (3) scoring and ranking them during the exploratory phase for an elementary analysis of which models perform better for a specific dataset.
 
 ## Demo
 Getting the data:
