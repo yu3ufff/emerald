@@ -35,4 +35,15 @@ rboa.ladder
  (OptimalLinearRegression, 0.8876961846248463),
  (OptimalLinearSVR, 0.8383624775592265)]
 ```
+```python
+for i in range(len(rboa)):
+    print(rboa.model(i))
+```
+```
+RandomForestRegressor(min_samples_split=5, random_state=3)
+KNeighborsRegressor(n_neighbors=3, p=1)
+DecisionTreeRegressor(max_depth=15, random_state=3)
+LinearRegression()
+LinearSVR(C=1000.0, epsilon=0.01, random_state=3)
+```
 
