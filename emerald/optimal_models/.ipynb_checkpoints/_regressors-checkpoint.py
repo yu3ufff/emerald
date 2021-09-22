@@ -3,8 +3,8 @@ import pandas as pd
 
 from sklearn.preprocessing import RobustScaler
 
-from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import LinearSVR
 
@@ -15,6 +15,7 @@ from sklearn.model_selection import GridSearchCV
 
 import statsmodels.api as sm
 
+from ..gems import prepare
 
 class BaseRegressor:
 
@@ -54,7 +55,7 @@ class OptimalDTreeRegressor(BaseRegressor):
             param_grid=[{'max_depth': [1, 2, 3, 4, 5, 10, 15, 20, 25, 50, 100, 200, None]}]
     ):
         if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
             # save sets
             self.X_train = X_train
@@ -103,7 +104,7 @@ class OptimalKNRegressor(BaseRegressor):
             param_grid=[{'n_neighbors': [1, 2, 3, 4, 5, 10, 15, 20], 'p': [1, 2]}]
     ):
         if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
             # standardize X_train and X_test
             robust_scaler = RobustScaler()
@@ -158,7 +159,7 @@ class OptimalLinearRegression(BaseRegressor):
             alpha=0.05
     ):
         if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
             # save sets
             self.X_train = X_train
@@ -214,7 +215,7 @@ class OptimalLinearSVR(BaseRegressor):
             param_grid=[{'C': [0.1, 1, 1.5, 3, 10, 50, 100, 1000], 'epsilon': [0, 0.01, 0.1, 0.2, 0.3, 0.5]}]
     ):
         if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
             # standardize X_train and X_test
             robust_scaler = RobustScaler()
@@ -271,7 +272,7 @@ class OptimalRFRegressor(BaseRegressor):
             param_grid=[{'n_estimators': [10, 50, 100], 'min_samples_split': [5, 10, 25, 50]}]
     ):
         if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
             # save sets
             self.X_train = X_train

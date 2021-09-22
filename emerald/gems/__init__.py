@@ -1,1 +1,3 @@
-from .sets import train_test_sets
+from ._sets import prepare
+
+__all__ = ['prepare']

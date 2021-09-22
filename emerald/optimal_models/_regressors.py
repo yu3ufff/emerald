@@ -15,23 +15,28 @@ from sklearn.model_selection import GridSearchCV
 
 import statsmodels.api as sm
 
+from ..gems import prepare
 
 class BaseRegressor:
+
+    def __repr__(self):
+        return type(self).__name__
 
     def score(self, X_test=None, y_test=None):
         if not self.model:
             raise ValueError('There is no model to use for scoring')
 
-        if self.y_test is not None:
-            return self.model.score(self.X_test, self.y_test)
-        elif X_test is not None and y_test is not None:
+        if X_test is not None and y_test is not None:
             return self.model.score(X_test, y_test)
+        elif self.X_test is not None and self.y_test is not None:
+            return self.model.score(self.X_test, self.y_test)
         else:
             raise ValueError('No test sets to use for scoring')
 
-    def get_sets(self):
+    def get_sets(self, save=False):
         X_train, X_test, y_train, y_test = self.X_train, self.X_test, self.y_train, self.y_test
-        self.X_train, self.X_test, self.y_train, self.y_test = (None, None, None, None)
+        if not save:
+            self.X_train, self.X_test, self.y_train, self.y_test = (None, None, None, None)
         return X_train, X_test, y_train, y_test
 
 
@@ -53,8 +58,8 @@ class OptimalDTreeRegressor(BaseRegressor):
             target=None,
             param_grid=[{'max_depth': [1, 2, 3, 4, 5, 10, 15, 20, 25, 50, 100, 200, None]}]
     ):
-        if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+        if isinstance(data, pd.DataFrame) and isinstance(target, str):
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
             # save sets
             self.X_train = X_train
@@ -62,7 +67,7 @@ class OptimalDTreeRegressor(BaseRegressor):
             self.y_train = y_train
             self.y_test = y_test
         elif X_train is None or y_train is None:
-            raise ValueError('Please pass in some data')
+            raise ValueError('Please pass in either your data and target feature or training set and target')
         else:
             # temporarily save sets
             self.X_train = X_train
@@ -102,13 +107,17 @@ class OptimalKNRegressor(BaseRegressor):
             target=None,
             param_grid=[{'n_neighbors': [1, 2, 3, 4, 5, 10, 15, 20], 'p': [1, 2]}]
     ):
-        if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+        if isinstance(data, pd.DataFrame) and isinstance(target, str):
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
             # standardize X_train and X_test
             robust_scaler = RobustScaler()
             X_train_scaled = robust_scaler.fit_transform(X_train)
             X_test_scaled = robust_scaler.fit_transform(X_test)
+            
+            # transform arrays back to DataFrame
+            X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train.columns)
+            X_test_scaled = pd.DataFrame(X_test_scaled, columns=X_test.columns)
 
             # save sets
             self.X_train = X_train_scaled
@@ -116,7 +125,7 @@ class OptimalKNRegressor(BaseRegressor):
             self.y_train = y_train
             self.y_test = y_test
         elif X_train is None or y_train is None:
-            raise ValueError('Please pass in some data')
+            raise ValueError('Please pass in either your data and target feature or training set and target')
         else:
             # temporarily save sets
             self.X_train = X_train
@@ -147,7 +156,7 @@ class OptimalLinearRegression(BaseRegressor):
         self.y_train = None
         self.y_test = None
         self.model = None
-        self.best_features = None
+        self.selected_features = None
 
     def find(
             self,
@@ -157,8 +166,19 @@ class OptimalLinearRegression(BaseRegressor):
             target=None,
             alpha=0.05
     ):
-        if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+        if isinstance(data, pd.DataFrame) and isinstance(target, str):
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
+            
+            # selecting the features with p-values <= alpha
+            X1_train = sm.add_constant(X_train)
+            ols = sm.OLS(y_train, X1_train)
+            lin_reg = ols.fit()
+
+            selected_features = [col for col in X_train.columns if lin_reg.summary2().tables[1]['P>|t|'][col] <= alpha]
+
+            # updating the sets to only have the selected features
+            X_train = X_train[selected_features] 
+            X_test = X_test[selected_features] # if X_test is not None else None (idk what this was for)
 
             # save sets
             self.X_train = X_train
@@ -166,31 +186,20 @@ class OptimalLinearRegression(BaseRegressor):
             self.y_train = y_train
             self.y_test = y_test
         elif X_train is None or y_train is None:
-            raise ValueError('Please pass in some data')
+            raise ValueError('Please pass in either your data and target feature or training set and target')
         else:
             # temporarily save sets
             self.X_train = X_train
             self.y_train = y_train
 
-        # selecting the features with p-values <= alpha
-        X1_train = sm.add_constant(X_train)
-        ols = sm.OLS(self.y_train, X1_train)
-        lin_reg = ols.fit()
-
-        selected_features = [col for col in self.X_train.columns if lin_reg.summary2().tables[1]['P>|t|'][col] <= alpha]
-
-        # updating the sets to only have the selected features
-        self.X_train = self.X_train[selected_features]
-        self.X_test = self.X_test[selected_features] if self.X_test is not None else None
-
         self.model = LinearRegression()
         self.model.fit(self.X_train, self.y_train)
 
-        self.best_features = selected_features
+        self.selected_features = selected_features
 
         if self.y_test is None:
             self.X_train, self.y_train = (None, None)
-            print('Warning: The training set has been updated. Please get the new selected features to use for further training and testing.')
+            # print('Warning: The training set has been updated. Please get the new selected features to use for further training and testing.')
 
         return self.model
 
@@ -211,15 +220,19 @@ class OptimalLinearSVR(BaseRegressor):
             y_train=None,
             data=None,
             target=None,
-            param_grid=[{'C': [0.1, 1, 1.5, 3, 10, 50, 100, 1000], 'epsilon': [0, 0.01, 0.1, 0.2, 0.3, 0.5]}]
+            param_grid=[{'C': [0.1, 1., 1.5, 3., 10., 50., 100., 1000.], 'epsilon': [0., 0.01, 0.1, 0.2, 0.3, 0.5]}]
     ):
-        if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+        if isinstance(data, pd.DataFrame) and isinstance(target, str):
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
             # standardize X_train and X_test
             robust_scaler = RobustScaler()
             X_train_scaled = robust_scaler.fit_transform(X_train)
             X_test_scaled = robust_scaler.fit_transform(X_test)
+            
+            # transform arrays back to DataFrame
+            X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train.columns)
+            X_test_scaled = pd.DataFrame(X_test_scaled, columns=X_test.columns)
 
             # save sets
             self.X_train = X_train_scaled
@@ -227,7 +240,7 @@ class OptimalLinearSVR(BaseRegressor):
             self.y_train = y_train
             self.y_test = y_test
         elif X_train is None or y_train is None:
-            raise ValueError('Please pass in some data')
+            raise ValueError('Please pass in either your data and target feature or training set and target')
         else:
             # temporarily save sets
             self.X_train = X_train
@@ -249,8 +262,7 @@ class OptimalLinearSVR(BaseRegressor):
 
         return self.model
 
-    
-    
+
     # Ensemble Methods
 class OptimalRFRegressor(BaseRegressor):
     def __init__(self, random_state=None):
@@ -268,10 +280,10 @@ class OptimalRFRegressor(BaseRegressor):
             y_train=None,
             data=None,
             target=None,
-            param_grid=[{'n_estimators': [10, 50, 100], 'min_samples_split': [5, 10, 25, 50]}]
+            param_grid=[{'n_estimators': [10, 50, 100], 'min_samples_split': [2, 5, 10, 25, 50]}]
     ):
-        if isinstance(data, pd.DataFrame):
-            X_train, X_test, y_train, y_test = cut(data, target, random_state=self.random_state)
+        if isinstance(data, pd.DataFrame) and isinstance(target, str):
+            X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
             # save sets
             self.X_train = X_train
@@ -279,7 +291,7 @@ class OptimalRFRegressor(BaseRegressor):
             self.y_train = y_train
             self.y_test = y_test
         elif X_train is None or y_train is None:
-            raise ValueError('Please pass in some data')
+            raise ValueError('Please pass in either your data and target feature or training set and target')
         else:
             # temporarily save sets
             self.X_train = X_train
