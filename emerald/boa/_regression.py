@@ -13,13 +13,6 @@ from ..gems import prepare
 from ..optimal_models import OptimalDTreeRegressor, OptimalKNRegressor, OptimalLinearRegression, OptimalLinearSVR, OptimalRFRegressor 
 
 
-class _BaseBoa:
-    def digest(self, data, impute='median'):
-        data = data
-        nums = [col for col in data.columns if data.dtypes[col] == 'int' and set(data[col].unique()) != {0, 1}]
-        cats = [col for col in data.columns if data.dtypes[col] != 'int' or set(data[col].unique()) == {0, 1}]
-
-
 class BaseBoa:
     
     NUM_REGRESSION_MODELS_SUPPORTED = 5
