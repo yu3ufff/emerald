@@ -9,7 +9,6 @@ import pandas as pd
 audi = pd.read_csv('audi.csv')
 audi.head()
 ```
-Output:
 ```
 |    | model   |   year |   price | transmission   |   mileage | fuelType   |   tax |   mpg |   engineSize |
 |---:|:--------|-------:|--------:|:---------------|----------:|:-----------|------:|------:|-------------:|
@@ -29,7 +28,6 @@ rboa = RegressionBoa(random_state=3)
 rboa.hunt(data=audi, target='price')
 rboa.ladder
 ```
-Output:
 ```
 [(OptimalRFRegressor, 0.9626985917160836),
  (OptimalKNRegressor, 0.9511411883559433),
