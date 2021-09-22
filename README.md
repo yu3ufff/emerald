@@ -1,3 +1,40 @@
 ![Emerald](emerald.jpg)
 # Emerald
-Machine learning model choice and optimization library.
+A machine learning library for streamlining the process of cleaning and splitting data, training, optimizing, and testing various models based on the task, and scoring and ranking them during the exploratory phase for an elementary analysis of which models perform better for a specific dataset.
+
+## Demo
+Getting the data:
+```python
+import pandas as pd
+audi = pd.read_csv('audi.csv')
+audi.head()
+```
+Output:
+```
+|    | model   |   year |   price | transmission   |   mileage | fuelType   |   tax |   mpg |   engineSize |
+|---:|:--------|-------:|--------:|:---------------|----------:|:-----------|------:|------:|-------------:|
+|  0 | A1      |   2017 |   12500 | Manual         |     15735 | Petrol     |   150 |  55.4 |          1.4 |
+|  1 | A6      |   2016 |   16500 | Automatic      |     36203 | Diesel     |    20 |  64.2 |          2   |
+|  2 | A1      |   2016 |   11000 | Manual         |     29946 | Petrol     |    30 |  55.4 |          1.4 |
+|  3 | A4      |   2017 |   16800 | Automatic      |     25952 | Diesel     |   145 |  67.3 |          2   |
+|  4 | A3      |   2019 |   17300 | Manual         |      1998 | Petrol     |   145 |  49.6 |          1   |
+```
+
+Using Emerald:
+```python
+import emerald
+from emerald.boa import RegressionBoa
+
+rboa = RegressionBoa(random_state=3)
+rboa.hunt(data=audi, target='price')
+rboa.ladder
+```
+Output:
+```
+[(OptimalRFRegressor, 0.9626985917160836),
+ (OptimalKNRegressor, 0.9511411883559433),
+ (OptimalDTreeRegressor, 0.94945655345777),
+ (OptimalLinearRegression, 0.8876961846248463),
+ (OptimalLinearSVR, 0.8383624775592265)]
+```
+
