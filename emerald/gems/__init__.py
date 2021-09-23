@@ -1,3 +1,3 @@
-from ._sets import prepare
+from ._data import prepare
 
 __all__ = ['prepare']
