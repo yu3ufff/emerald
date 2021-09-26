@@ -31,7 +31,7 @@ rboa.ladder
 ```
 [(OptimalRFRegressor, 0.9624889664024406),
  (OptimalKNRegressor, 0.9511411883559433),
- (OptimalDTreeRegressor, 0.94945655345777),
+ (OptimalDTRegressor, 0.94945655345777),
  (OptimalLinearRegression, 0.8876961846248467),
  (OptimalABRegressor, 0.8491539140007975)]
 ```
