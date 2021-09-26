@@ -1,7 +1,3 @@
-"""
-Basic Optimized Analysis
-"""
-
 class BaseBoa:
     
     NUM_REGRESSION_MODELS_SUPPORTED = 5

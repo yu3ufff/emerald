@@ -1,3 +1,7 @@
+"""
+Optimal Models
+"""
+
 from ._regressors import OptimalDTRegressor, OptimalKNRegressor, OptimalLinearRegression, OptimalABRegressor, OptimalRFRegressor 
 
 __all__ = [
