@@ -39,7 +39,7 @@ class BaseRegressor:
         return X_train, X_test, y_train, y_test
 
 
-class OptimalDTreeRegressor(BaseRegressor):
+class OptimalDTRegressor(BaseRegressor):
     def __init__(self, random_state=None):
         self.random_state = random_state
         self.X_train = None
@@ -55,7 +55,7 @@ class OptimalDTreeRegressor(BaseRegressor):
             y_train=None,
             data=None,
             target=None,
-            param_grid=[{'max_depth': [1, 2, 3, 4, 5, 10, 15, 20, 25, 50, 100, 200, None]}]
+            param_grid=[{'max_depth': [1, 2, 3, 4, 5, 10, 15, 20, 25, 50, 100, 200, None], 'min_samples_split': [2, 5, 10]}]
     ):
         if isinstance(data, pd.DataFrame) and isinstance(target, str):
             X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
@@ -76,8 +76,9 @@ class OptimalDTreeRegressor(BaseRegressor):
         grid.fit(self.X_train, self.y_train)
 
         optimal_depth = grid.best_params_['max_depth']
+        optimal_split = grid.best_params_['min_samples_split']
 
-        self.model = DecisionTreeRegressor(max_depth=optimal_depth, random_state=self.random_state)
+        self.model = DecisionTreeRegressor(max_depth=optimal_depth, min_samples_split=optimal_split, random_state=self.random_state)
         self.model.fit(self.X_train, self.y_train)
 
         self.best_params = grid.best_params_

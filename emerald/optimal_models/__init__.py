@@ -1,7 +1,7 @@
-from ._regressors import OptimalDTreeRegressor, OptimalKNRegressor, OptimalLinearRegression, OptimalABRegressor, OptimalRFRegressor 
+from ._regressors import OptimalDTRegressor, OptimalKNRegressor, OptimalLinearRegression, OptimalABRegressor, OptimalRFRegressor 
 
 __all__ = [
-    'OptimalDTreeRegressor', 
+    'OptimalDTRegressor', 
     'OptimalKNRegressor', 
     'OptimalLinearRegression', 
     'OptimalABRegressor', 

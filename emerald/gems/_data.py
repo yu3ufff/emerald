@@ -18,6 +18,10 @@ def prepare(data, target, impute=True, test_size=0.2, stratified=False, random_s
         
         if target in categoricals:
             raise ValueError('Please enter a continuous variable as a target.')
+
+        # remove rows and columns with all nan values
+        data.dropna(axis=0, how='all', inplace=True)
+        data.dropna(axis=1, how='all', inplace=True)
         
         # impute missing data
         if impute:

@@ -1,5 +1,3 @@
 from ._regression import RegressionBoa
 
-__all__ = [
-    'RegressionBoa',
-]
+__all__ = ['RegressionBoa']
