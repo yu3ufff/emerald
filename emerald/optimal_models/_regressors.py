@@ -6,7 +6,6 @@ from sklearn.preprocessing import RobustScaler
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.linear_model import LinearRegression
-from sklearn.svm import LinearSVR
 
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import RandomForestRegressor
@@ -73,7 +72,7 @@ class OptimalDTreeRegressor(BaseRegressor):
             self.X_train = X_train
             self.y_train = y_train
 
-        grid = GridSearchCV(DecisionTreeRegressor(), param_grid)
+        grid = GridSearchCV(DecisionTreeRegressor(), param_grid, n_jobs=-1)
         grid.fit(self.X_train, self.y_train)
 
         optimal_depth = grid.best_params_['max_depth']
@@ -131,7 +130,7 @@ class OptimalKNRegressor(BaseRegressor):
             self.X_train = X_train
             self.y_train = y_train
 
-        grid = GridSearchCV(KNeighborsRegressor(), param_grid)
+        grid = GridSearchCV(KNeighborsRegressor(), param_grid, n_jobs=-1)
         grid.fit(self.X_train, self.y_train)
 
         optimal_neighbors = grid.best_params_['n_neighbors']
@@ -178,7 +177,7 @@ class OptimalLinearRegression(BaseRegressor):
 
             # updating the sets to only have the selected features
             X_train = X_train[selected_features] 
-            X_test = X_test[selected_features] # if X_test is not None else None (idk what this was for)
+            X_test = X_test[selected_features] 
 
             # save sets
             self.X_train = X_train
@@ -204,7 +203,8 @@ class OptimalLinearRegression(BaseRegressor):
         return self.model
 
 
-class OptimalLinearSVR(BaseRegressor):
+    # Ensemble Methods
+class OptimalABRegressor(BaseRegressor):
     def __init__(self, random_state=None):
         self.random_state = random_state
         self.X_train = None
@@ -220,23 +220,14 @@ class OptimalLinearSVR(BaseRegressor):
             y_train=None,
             data=None,
             target=None,
-            param_grid=[{'C': [0.1, 1., 1.5, 3., 10., 50., 100., 1000.], 'epsilon': [0., 0.01, 0.1, 0.2, 0.3, 0.5]}]
+            param_grid=[{'n_estimators': [10, 50, 100, 500], 'learning_rate': [0.0001, 0.001, 0.01, 0.1, 1.0]}]
     ):
         if isinstance(data, pd.DataFrame) and isinstance(target, str):
             X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
 
-            # standardize X_train and X_test
-            robust_scaler = RobustScaler()
-            X_train_scaled = robust_scaler.fit_transform(X_train)
-            X_test_scaled = robust_scaler.fit_transform(X_test)
-            
-            # transform arrays back to DataFrame
-            X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train.columns)
-            X_test_scaled = pd.DataFrame(X_test_scaled, columns=X_test.columns)
-
             # save sets
-            self.X_train = X_train_scaled
-            self.X_test = X_test_scaled
+            self.X_train = X_train
+            self.X_test = X_test
             self.y_train = y_train
             self.y_test = y_test
         elif X_train is None or y_train is None:
@@ -245,14 +236,14 @@ class OptimalLinearSVR(BaseRegressor):
             # temporarily save sets
             self.X_train = X_train
             self.y_train = y_train
-            
-        grid = GridSearchCV(LinearSVR(), param_grid)
+    
+        grid = GridSearchCV(AdaBoostRegressor(), param_grid, n_jobs=-1)
         grid.fit(self.X_train, self.y_train.values.ravel())
 
-        optimal_C = grid.best_params_['C']
-        optimal_epsilon = grid.best_params_['epsilon']
+        optimal_rate = grid.best_params_['learning_rate']
+        optimal_estimators = grid.best_params_['n_estimators']
 
-        self.model = LinearSVR(epsilon=optimal_epsilon, C=optimal_C, random_state=self.random_state)
+        self.model = AdaBoostRegressor(n_estimators=optimal_estimators, learning_rate=optimal_rate, random_state=self.random_state)
         self.model.fit(self.X_train, self.y_train.values.ravel())
 
         self.best_params = grid.best_params_
@@ -263,7 +254,6 @@ class OptimalLinearSVR(BaseRegressor):
         return self.model
 
 
-    # Ensemble Methods
 class OptimalRFRegressor(BaseRegressor):
     def __init__(self, random_state=None):
         self.random_state = random_state
@@ -280,7 +270,7 @@ class OptimalRFRegressor(BaseRegressor):
             y_train=None,
             data=None,
             target=None,
-            param_grid=[{'n_estimators': [10, 50, 100], 'min_samples_split': [2, 5, 10, 25, 50]}]
+            param_grid=[{'n_estimators': [10, 50, 100, 500], 'min_samples_split': [2, 5, 10, 25, 50]}]
     ):
         if isinstance(data, pd.DataFrame) and isinstance(target, str):
             X_train, X_test, y_train, y_test = prepare(data, target, random_state=self.random_state)
@@ -297,7 +287,7 @@ class OptimalRFRegressor(BaseRegressor):
             self.X_train = X_train
             self.y_train = y_train
 
-        grid = GridSearchCV(RandomForestRegressor(), param_grid)
+        grid = GridSearchCV(RandomForestRegressor(), param_grid, n_jobs=-1)
         grid.fit(self.X_train, self.y_train.values.ravel())
 
         optimal_split = grid.best_params_['min_samples_split']
@@ -312,3 +302,4 @@ class OptimalRFRegressor(BaseRegressor):
             self.X_train, self.y_train = (None, None)
 
         return self.model
+    

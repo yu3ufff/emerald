@@ -5,12 +5,8 @@ Optimal ML Model
 import numpy as np
 import pandas as pd
 
-from sklearn.impute import SimpleImputer
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.tree import DecisionTreeClassifier
-
 from ..gems import prepare
-from ..optimal_models import OptimalDTreeRegressor, OptimalKNRegressor, OptimalLinearRegression, OptimalLinearSVR, OptimalRFRegressor 
+from ..optimal_models import OptimalDTreeRegressor, OptimalKNRegressor, OptimalLinearRegression, OptimalABRegressor, OptimalRFRegressor 
 
 
 class BaseBoa:
@@ -19,8 +15,8 @@ class BaseBoa:
     
     reg_model_index = {0: 'dtree', 
                        1: 'knn', 
-                       2: 'linreg', 
-                       3: 'linsvr', 
+                       2: 'linreg',
+                       3: 'adaboost',
                        4: 'rforest',
                        }
     
@@ -84,12 +80,12 @@ class RegressionBoa(BaseBoa):
             model = self.find_optimal_knn(X_train=X_train, y_train=y_train, data=data, target=target)
         elif regressor == 'linreg':
             model = self.find_optimal_linreg(X_train=X_train, y_train=y_train, data=data, target=target)
-        elif regressor == 'linsvr':
-            model = self.find_optimal_linsvr(X_train=X_train, y_train=y_train, data=data, target=target)
+        elif regressor == 'adaboost':
+            model = self.find_optimal_adaboost(X_train=X_train, y_train=y_train, data=data, target=target)
         elif regressor == 'rforest':
             model = self.find_optimal_rforest(X_train=X_train, y_train=y_train, data=data, target=target)
         else:
-            raise ValueError('Requested regressor not found. Please choose either \'dtree\' or \'knn\' or \'linreg\' or \'linsvr\' or \'rforest\'')
+            raise ValueError('Requested regressor not found. Please choose either \'dtree\' or \'knn\' or \'linreg\' or \'adaboost\' or \'rforest\'')
             
         return model
     
@@ -115,11 +111,11 @@ class RegressionBoa(BaseBoa):
         return optimal_linreg
     
     
-    def find_optimal_linsvr(self, X_train=None, y_train=None, data=None, target=None):
-        optimal_linsvr = OptimalLinearSVR(self.random_state)
-        optimal_linsvr.find(X_train=X_train, y_train=y_train, data=data, target=target)
+    def find_optimal_adaboost(self, X_train=None, y_train=None, data=None, target=None):
+        optimal_adaboost = OptimalABRegressor(self.random_state)
+        optimal_adaboost.find(X_train=X_train, y_train=y_train, data=data, target=target)
         
-        return optimal_linsvr
+        return optimal_adaboost
     
     
     def find_optimal_rforest(self, X_train=None, y_train=None, data=None, target=None):
@@ -130,37 +126,29 @@ class RegressionBoa(BaseBoa):
         
 
 
+
+# Skeletons below, finish and move them later
 class ClassBoa(_BaseBoa):
 
     def __init__(self, random_state=None):
         self.random_state = random_state
-        self.best = None
-        self.second = None
-        self.third = None
+        self.ladder = []
 
 
-    def hunt(self, data, target=None, test_size=0.2, strat_var=None, n_splits=1):
-        data = data
+    def hunt(self, X_train=None, X_test=None, y_train=None, y_test=None, data=None, target=None):
+        pass
 
-        # creating the train and test sets
-        X_train, X_test, y_train, y_test = prepare(data, target, self.random_state, test_size, strat_var, n_splits)
 
 
 class TreeBoa(_BaseBoa):
 
     def __init__(self, random_state=None, type_='reg'):
         self.random_state = random_state
-        self.type_ = type_
-        self.best = None
-        self.second = None
-        self.third = None
+        self.ladder = []
 
 
-    def hunt(self, data, target=None, test_size=0.2, strat_var=None, n_splits=1):
-        data = data
-
-        # creating the train and test sets
-        X_train, X_test, y_train, y_test = prepare(data, target, self.random_state, test_size, strat_var, n_splits)
+    def hunt(self, X_train=None, X_test=None, y_train=None, y_test=None, data=None, target=None):
+        pass
 
 
 

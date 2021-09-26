@@ -1,3 +1,3 @@
-from ._data import prepare
+from ._data import prepare, PolishedImputer
 
-__all__ = ['prepare']
+__all__ = ['prepare', 'PolishedImputer']
