@@ -19,7 +19,7 @@ audi.head()
 |  4 | A3      |   2019 |   17300 | Manual         |      1998 | Petrol     |   145 |  49.6 |          1   |
 ```
 
-Using Emerald:
+Using EmeraldML:
 ```python
 import emerald
 from emerald.boa import RegressionBoa
