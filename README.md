@@ -2,6 +2,19 @@
 # EmeraldML
 A machine learning library for streamlining the process of (1) cleaning and splitting data, (2) training, optimizing, and testing various models based on the task, and (3) scoring and ranking them during the exploratory phase for an elementary analysis of which models perform better for a specific dataset.
 
+## Installation
+### Dependencies
+- Python (>= 3.7)
+- NumPy (>= 1.21.2)
+- pandas (>= 1.3.3)
+- scikit-learn (>= 0.24.2)
+- statsmodels (>= 0.12.2)
+
+### User installation
+```
+pip install emeraldml
+```
+
 ## Demo
 Getting the data:
 ```python
