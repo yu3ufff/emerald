@@ -1,5 +1,5 @@
 """
-Basic Optimized Analysis
+Build. Optimize. Analyze.
 """
 
 from ._regression import RegressionBoa
