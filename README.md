@@ -30,8 +30,8 @@ rboa.ladder
 ```
 ```
 [(OptimalRFRegressor, 0.9624889664024406),
+ (OptimalDTRegressor, 0.9514992411732952),
  (OptimalKNRegressor, 0.9511411883559433),
- (OptimalDTRegressor, 0.94945655345777),
  (OptimalLinearRegression, 0.8876961846248467),
  (OptimalABRegressor, 0.8491539140007975)]
 ```
@@ -41,8 +41,8 @@ for i in range(len(rboa)):
 ```
 ```
 RandomForestRegressor(min_samples_split=5, n_estimators=500, random_state=3)
+DecisionTreeRegressor(max_depth=15, min_samples_split=10, random_state=3)
 KNeighborsRegressor(n_neighbors=3, p=1)
-DecisionTreeRegressor(max_depth=15, random_state=3)
 LinearRegression()
 AdaBoostRegressor(learning_rate=0.1, n_estimators=100, random_state=3)
 ```
