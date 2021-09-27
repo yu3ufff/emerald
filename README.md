@@ -15,6 +15,11 @@ A machine learning library for streamlining the process of (1) cleaning and spli
 pip install emeraldml
 ```
 
+### Source code
+```
+git clone https://github.com/yu3ufff/emeraldml.git
+```
+
 ## Demo
 Getting the data:
 ```python
