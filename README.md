@@ -15,7 +15,8 @@ A machine learning library for streamlining the process of (1) cleaning and spli
 pip install emeraldml
 ```
 
-### Source code
+## Source code
+You can check the latest sources with the command:
 ```
 git clone https://github.com/yu3ufff/emeraldml.git
 ```
