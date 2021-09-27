@@ -23,7 +23,7 @@ git clone https://github.com/yu3ufff/emeraldml.git
 ```
 
 ## Demo
-Getting the data:
+**Getting the data**:
 ```python
 import pandas as pd
 audi = pd.read_csv('audi.csv')
@@ -39,7 +39,7 @@ audi.head()
 |  4 | A3      |   2019 |   17300 | Manual         |      1998 | Petrol     |   145 |  49.6 |          1   |
 ```
 
-Using EmeraldML:
+**Using EmeraldML**:
 ```python
 import emerald
 from emerald.boa import RegressionBoa
