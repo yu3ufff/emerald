@@ -43,3 +43,4 @@ class BaseBoa:
 
     def find_optimal(self, model, X_train=None, y_train=None, data=None, target=None):
         pass
+    
