@@ -1,4 +1,3 @@
-[comment]: <> (![EmeraldML](emeraldml.png =25x25))
 <img src="emeraldml.png" alt="drawing" width="300"/>
 # EmeraldML
 A machine learning library for streamlining the process of  
