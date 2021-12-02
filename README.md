@@ -1,4 +1,4 @@
-![EmeraldML](emeraldml.png)
+![EmeraldML](emeraldml.png =25x25)
 # EmeraldML
 A machine learning library for streamlining the process of  
 (1) cleaning and splitting data,  
