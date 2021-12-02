@@ -1,4 +1,5 @@
-![Emerald](emerald.jpg)
+<img src="emeraldml.png" alt="drawing" width="300"/>
+
 # EmeraldML
 A machine learning library for streamlining the process of  
 (1) cleaning and splitting data,  
