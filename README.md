@@ -1,4 +1,3 @@
-<img src="emeraldml.jpg" alt="drawing" width="300"/>
 <img src="emeraldml.png" alt="drawing" width="300"/>
 
 # EmeraldML
