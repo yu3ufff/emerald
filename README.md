@@ -1,6 +1,11 @@
-<p style="text-align:center;">
+<style type="text/css">
+.center
+{
+ text-align:center;
+ display:block;
+}
+</style>
 <img src="emeraldml.png" alt="drawing" class="center" width="200"/>
-</p>
 
 # EmeraldML
 A machine learning library for streamlining the process of  
