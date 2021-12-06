@@ -1,4 +1,5 @@
 ![AppVeyor](https://img.shields.io/appveyor/build/yu3ufff/emeraldml)
+![Codacy grade](https://img.shields.io/codacy/grade/69671d82450949409d1bb72aaf750dcc)
 ![PyPI](https://img.shields.io/pypi/v/emeraldml?color=informational)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/emeraldml)
 ![PyPI - License](https://img.shields.io/pypi/l/emeraldml?color=informational)
