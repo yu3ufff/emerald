@@ -1,5 +1,5 @@
-![PyPI](https://img.shields.io/pypi/v/emeraldml?color=blueviolet)
 ![AppVeyor](https://img.shields.io/appveyor/build/yu3ufff/emeraldml)
+![PyPI](https://img.shields.io/pypi/v/emeraldml?color=informational)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/emeraldml)
 ![PyPI - License](https://img.shields.io/pypi/l/emeraldml?color=informational)
 
