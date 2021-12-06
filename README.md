@@ -1,4 +1,5 @@
 ![PyPI - License](https://img.shields.io/pypi/l/emeraldml?color=informational)
+
 <img src="emeraldml.png" alt="EmeraldML logo" class="center" width="200"/>
 
 # EmeraldML
