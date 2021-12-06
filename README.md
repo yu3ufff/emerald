@@ -1,4 +1,9 @@
 <img src="emeraldml.png" alt="drawing" class="center" width="200"/>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 # EmeraldML
 A machine learning library for streamlining the process of  
