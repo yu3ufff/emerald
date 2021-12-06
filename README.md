@@ -1,4 +1,4 @@
-<img src="emeraldml.png" alt="drawing" class="center" width="200"/>
+<img src="emeraldml.png" alt="EmeraldML logo" class="center" width="200"/>
 
 # EmeraldML
 A machine learning library for streamlining the process of  
