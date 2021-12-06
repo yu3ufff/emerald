@@ -1,3 +1,5 @@
+![AppVeyor](https://img.shields.io/appveyor/build/yu3ufff/emeraldml)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/emeraldml)
 ![PyPI - License](https://img.shields.io/pypi/l/emeraldml?color=informational)
 
 <img src="emeraldml.png" alt="EmeraldML logo" class="center" width="200"/>
